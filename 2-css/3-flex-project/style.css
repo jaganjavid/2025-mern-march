@@ -1,0 +1,122 @@
+*{
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+.container{
+    width: 80%;
+    margin: 0px auto;
+}
+
+a{
+    text-decoration: none;
+    display: inline-block;
+}
+
+body{
+    font-family: "Urbanist", sans-serif;
+}
+
+.btn{
+    padding: 10px 25px;
+    background-color: green;
+    border-radius: 30px;
+}
+
+.btn-primary{
+    background-color: #A8FF35;
+    color: #333333;
+    border: 1px solid #A8FF35;
+}
+
+.btn-outline{
+    background-color: transparent;
+    color: #A8FF35;
+    border: 1px solid #A8FF35;
+}
+
+/* Header start */
+
+
+header{
+    padding: 20px 0px;
+}
+
+.header-wrapper{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+nav{
+    display: flex;
+    gap: 50px;
+}
+
+nav a{
+    color: #ffffff;
+}
+
+/* Banner start */
+
+main{
+    /* background-color: black; */
+    background: url("./img/banner/bg.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+.banner{
+    text-align: center;
+    padding: 150px 0px 200px 0px;
+    color: #ffffff;
+}
+
+.banner h1{
+    margin-bottom: 20px;
+    font-size: 64px;
+}
+
+.banner p{
+    margin-bottom: 50px;
+}
+
+.banner-btn{
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}
+
+
+/* subscriber */
+
+.subscriber{
+    padding: 100px 0px;
+}
+
+.subscriber h2{
+    font-size: 128px;
+    font-weight:400;
+}
+
+.subscriber-wrapper{
+    display:flex;
+    justify-content: space-between;
+}
+
+.subscriber-child{
+    width: 30%;
+}
+
+.subscriber-icon{
+    margin-top: 30px;
+    display: inline-flex;
+    align-items: center;
+    gap: 20px;
+    padding: 10px 15px;
+    background-color: #A8FF35;
+    border: 1px solid #333333;
+    border-radius: 30px;
+}
