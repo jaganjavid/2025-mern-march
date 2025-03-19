@@ -1,0 +1,192 @@
+:root{
+    --primary-color:#231A36;
+}
+
+*{
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+body{
+    font-family: "Poppins", sans-serif;
+}
+
+/* Deafult code */
+
+a{
+    text-decoration: none;
+}
+
+a, span{
+    display: inline-block;
+}
+
+.container{
+    max-width: 1200px;
+    margin: 0px auto;
+    padding: 0px 15px;
+}
+
+h2{
+    font-size: 32px;
+}
+
+.sec-heading{
+    margin-bottom: 60px;
+    text-align: center;
+}
+
+.sec-heading h2{
+    margin-bottom: 20px;
+}
+
+header{
+    padding: 20px 0px;
+}
+
+.header-wrapper{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-wrapper nav{
+    display: none;
+}
+
+.header-wrapper a{
+    color: #ffffff;
+}
+
+.btn{
+    padding: 12px 20px;
+    border-radius: 25px;
+}
+
+.btn.primary-btn{
+    background-color: var(--primary-color);
+    color: #ffffff;
+}
+
+.btn.secondary-btn{
+    background-color: #231A36;
+    color: #ffffff;
+}
+
+/* Banner start */
+
+main{
+  background: url("../img/banner/bg.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.banner{
+    text-align: center;
+    padding: 100px 0px 145px 0px;
+    color: #ffffff;
+}
+
+.banner h1{
+    font-size: 55px;
+}
+
+.banner p{
+    margin: 30px 0px 100px 0px;
+}
+
+/* clients */
+
+.clients{
+    padding: 80px 0px;
+}
+
+.clients h5{
+    margin-bottom: 50px;
+    text-align: center;
+    color: #B2B7BE;
+}
+
+.clients-wrapper{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+
+/* need */
+
+.need{
+    padding: 100px 0px;
+}
+
+.need .container{
+    max-width: 800px;
+}
+
+.need-wrapper > div{
+    display: flex;
+    align-items: center;
+}
+
+.need-wrapper > div > div{
+    width: 50%;
+}
+
+.need-wrapper > div > div:nth-child(2){
+    text-align: right;
+}
+
+
+/* Resposive Design */
+
+@media only screen and (min-width: 600px) {
+    .header-wrapper nav{
+        display: flex;
+        gap:30px;
+    }
+
+    .clients-wrapper > div{
+        width: 50%;
+        text-align: center;
+     }
+}
+
+@media only screen and (min-width: 768px) {
+    .line-break{
+        display: block;
+    }
+
+    .banner h1{
+        font-size: 65px;
+    }
+
+    .clients-wrapper > div{
+        width: 30%;
+     }
+}
+
+@media only screen and (min-width: 998px) {
+    .banner h1{
+        font-size: 94px;
+    }
+
+    .clients-wrapper{
+       flex-wrap: nowrap;
+    }
+
+    h2{
+        font-size: 40px;
+    }   
+}
+
+@media only screen and (max-width: 600px) {
+    .clients-wrapper > div{
+        width: 100%;
+        text-align: center;
+     }
+}
+
