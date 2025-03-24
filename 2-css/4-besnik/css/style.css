@@ -63,6 +63,9 @@ header{
 .btn{
     padding: 12px 20px;
     border-radius: 25px;
+    display: inline-flex;
+    align-items: center;
+    gap: 20px;
 }
 
 .btn.primary-btn{
@@ -220,6 +223,42 @@ main{
     padding: 100px 0px;
 }
 
+.solutions-wrapper{
+    display: flex;
+    justify-content: space-between;
+    gap:50px;
+}
+
+.solutions-wrapper > div {
+    position: relative;
+}
+
+.solutions-wrapper > div > img{
+    width: 100%;
+}
+
+.solutions-wrapper > div > div{
+    position: absolute;
+    left: 0px;
+    bottom: -50px;
+    background-color: #ffffff;
+    width: 80%;
+    padding: 25px;
+}
+
+.solutions-wrapper > div > div > div{
+    display: flex;
+    gap: 20px;
+}
+
+
+.solutions-wrapper h3{
+    font-size: 18px;
+}
+
+.solutions-wrapper > div > div > div span {
+    font-size: 10px;
+}
 
 
 /* happy */
@@ -240,6 +279,79 @@ main{
     left: 0px;
 }
 
+
+
+.happy-wrapper p {
+    margin: 30px 0px;
+    font-size: 22px;
+    font-style: italic;
+}
+
+.happy-wrapper > div:nth-child(2){
+    text-align: center;
+}
+
+/* newsletter */
+.newsletter{
+    padding: 100px 0px;
+}
+
+.newsletter-wrapper{
+    text-align: center;
+    padding: 50px;
+    color: #ffffff;
+    background: url("../img/newsletter/bg.png") no-repeat center;
+    /* background-repeat: no-repeat;
+    background-position: center; */
+    background-size: cover;
+    border-radius: 25px;
+}
+
+.newsletter-wrapper h3{
+    font-size: 40px;
+}
+
+.newsletter-wrapper p{
+    margin: 30px 0px;
+}
+
+/* footer */
+
+footer{
+    padding: 50px 0px;
+}
+
+.footer-wrapper{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 50px;
+    border-bottom: 1px solid #cacaca;
+}
+
+.footer-wrapper img{
+    filter: invert(1);
+}
+
+.footer-wrapper nav{
+    display: flex;
+    gap: 20px;
+}
+
+.footer-wrapper nav a{
+    color: #333333;
+}
+
+.footer-wrapper nav i{
+    color: #333333;
+}
+
+.cr{
+    text-align: center;
+    margin-top: 30px;
+    font-size: 11px;
+    color: #959595;
+}
 
 /* .parent{
     width: 200px;
@@ -319,6 +431,19 @@ main{
     .social-wrapper > div {
         width: 25%;
     }
+
+    .happy-wrapper{
+        display: flex;
+        align-items: center;
+    }
+    
+    .happy-wrapper > div {
+        width: 50%;
+    }
+    
+    .happy-wrapper > div:nth-child(2){
+        text-align: right;
+    }
     
 }
 
@@ -334,12 +459,41 @@ main{
     h2{
         font-size: 40px;
     }   
+
+    .solutions-wrapper h4{
+        font-size: 16px;
+        font-weight: 600;
+    }
+    
+    .solutions-wrapper h3{
+        font-size: 24px;
+    }
+}
+
+
+@media only screen and (max-width: 998px) {
+    .solutions-wrapper{
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .solutions-wrapper > div{
+        width: 60%;
+        margin-bottom: 50px;
+    }
 }
 
 @media only screen and (max-width: 600px) {
     .clients-wrapper > div{
         width: 100%;
         text-align: center;
-     }
+    }
+
+    .footer-wrapper{
+        flex-direction: column;
+        gap: 30px;
+    }
 }
+
+
 
