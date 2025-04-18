@@ -1,21 +1,25 @@
 
 
-// Book contructor
+// Book constructor
 
-function Book(title, author, isbn){
-    this.title = title;
-    this.author = author;
-    this.isbn = isbn;
+class Book{
+
+    constructor(title, author, isbn){
+
+        this.title = title;
+        this.author = author;
+        this.isbn = isbn;
+
+    }
+
+
 }
 
+class UI{
 
-// UI
-
-function UI(){
-    
     // Add Book to list
 
-    UI.prototype.addBookToList = function(book){
+    addBookToList(book){
 
         const list = document.querySelector("#book-list");
 
@@ -36,16 +40,14 @@ function UI(){
 
     }
 
-    UI.prototype.deleteBook = function(targetElement){
+    deleteBook(targetElement){
 
         if(targetElement.className === "delete"){
             targetElement.parentElement.remove();
         }
-        
-
     }
 
-    UI.prototype.clearField = function(){
+    clearField(){
 
         document.querySelector("#title").value = "";
         document.querySelector("#author").value = "";
@@ -53,7 +55,7 @@ function UI(){
 
     }
 
-    UI.prototype.showAlert = function(message, className){
+    showAlert(message, className){
 
         this.clearAlert();
 
@@ -78,13 +80,13 @@ function UI(){
 
     }
 
-    UI.prototype.clearTasks = function(){
+    clearTasks(){
 
        document.querySelector("#book-list").innerHTML = "";
 
     }
 
-    UI.prototype.clearAlert = function(){
+    clearAlert(){
 
         const currentAlert = document.querySelector(".alert");
 
@@ -93,9 +95,9 @@ function UI(){
         }
  
     }
+
+
 }
-
-
 
 // Event Listen for submit
 
@@ -154,4 +156,3 @@ document.querySelector(".clear").addEventListener("click", function(e){
     ui.showAlert("Book cleared succfully", "alert-success");
 
 })
-
