@@ -20,7 +20,22 @@
 // const sayHello = () => [true]
 
 // Return obejct in a one line
-const sayHello = () => ({msg:"Hello"})
+// const sayHello = () => ({msg:"Hello"})
 
 
-console.log(sayHello());
+// Single params does not need a parentheses
+
+// const sayHello = name => `Hello ${name}`;
+
+// const sayHello = (firstName, lastName) => `Hello ${firstName} ${lastName}`;
+
+
+// console.log(sayHello("jagan","Javid"));
+
+const users = ["Javid", "Jagan", "Akash"];
+
+// users.forEach(function(user){
+//     console.log(user);
+// })
+
+users.forEach((user, index) => console.log(`${user} - ${index}`))
