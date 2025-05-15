@@ -6,7 +6,78 @@
 
 const StorageCtrl = (function(){
 
+    return{
+        storeItem:function(newItem){
+           
+            let items;
+
+            // Check if any items in array
+
+            if(localStorage.getItem("items") === null){
+                items = [];
+            }else{
+                // Get the existing data from ls
+                items = JSON.parse(localStorage.getItem("items"));
+            }
+
+            items.push(newItem);
+
+            localStorage.setItem("items", JSON.stringify(items));
+
+
+        },
+        getItems: function(){
+            let items;
+
+            // Check if any items in array
+
+            if(localStorage.getItem("items") === null){
+                items = [];
+            }else{
+                // Get the existing data from ls
+                items = JSON.parse(localStorage.getItem("items"));
+            }
+
+            return items;
+        },
+        updateItemLs: function(updatedItem){
+
+            // Get the existing data from ls
+            let items = JSON.parse(localStorage.getItem("items"));
+
+            items.forEach(function(item, index){
+
+                if(updatedItem.id === item.id){
+                    
+                    items.splice(index, 1, updatedItem)
+
+                }
+                
+
+            })
+
+            localStorage.setItem("items", JSON.stringify(items));
+
+        },
+        deleteFromLs:function(id){
+
+            let items = JSON.parse(localStorage.getItem("items"));
+
+            items.forEach(function(item, index){
+                if(id === item.id){
+                    items.splice(index, 1)
+                }
+            })
+
+            localStorage.setItem("items", JSON.stringify(items));
+        },
+        clearItemsLs:function(){
+            localStorage.removeItem("items");
+        }
+    }
+
 })();
+
 
 
 // ITEM CONTROLLER
@@ -26,11 +97,12 @@ const ItemCtrl = (function(){
     // Data Structure
     
     const data = {
-        items:[
-            {id:0, name:"Clothes", money:1000},
-            {id:1, name:"Food", money:2000},
-            {id:2, name:"Car Service", money:5000},
-        ],
+        // items:[
+        //     {id:0, name:"Clothes", money:1000},
+        //     {id:1, name:"Food", money:2000},
+        //     {id:2, name:"Car Service", money:5000},
+        // ],
+        items:StorageCtrl.getItems(),
         totalMoney:0,
         currentItem:null
     };
@@ -119,6 +191,25 @@ const ItemCtrl = (function(){
         },
         clearAllItems: function(){
             return data.items = [];
+        },
+        updateItem: function(name, money){
+
+            money = Number(money);
+
+            let found = null;
+
+            data.items.forEach(function(item){
+
+                if(item.id === data.currentItem.id){
+                    item.name = name,
+                    item.money = money,
+                    found = item
+                }
+
+            })
+
+            return found;
+
         }
     }
 
@@ -230,6 +321,40 @@ const UICtrl = (function(){
             const collection = document.querySelector("#item-list");
 
             collection.innerHTML = "";
+        },
+        updateListItem: function(item){
+            
+            let listItems = document.querySelectorAll(".collection-item");
+
+            listItems.forEach(function(listItem){
+
+                const itemID = listItem.id;
+
+                if(itemID === `item-${item.id}`){
+                    document.querySelector(`#${itemID}`).innerHTML = `
+                    <strong>${item.name}</strong> :
+                        <em>${item.money} RS</em>
+                        <a href="#" class="secondary-content">
+                        <i class="fa-solid fa-pencil edit-item"></i>
+                    </a>
+                    `;
+                }
+
+            })
+
+            // const itemId = `#item-${item.id}`;
+
+            // const itemList = document.querySelector(itemId);
+
+            // itemList.innerHTML = `
+            // <strong>${item.name}</strong> :
+            //     <em>${item.money} RS</em>
+            //     <a href="#" class="secondary-content">
+            //     <i class="fa-solid fa-pencil edit-item"></i>
+            // </a>
+            // `;
+
+
         }
     }
 
@@ -248,6 +373,9 @@ const App = (function(){
 
         // Edit icon click
         document.querySelector("#item-list").addEventListener("click", itemEditClick);
+
+        // Update item event
+        document.querySelector(".update-btn").addEventListener("click", itemUpdateSubmit);
 
         // Delete Item Event
         document.querySelector(".delete-btn").addEventListener("click", itemDeleteSubmit);
@@ -281,14 +409,17 @@ const App = (function(){
             // Add iten to UI
             UICtrl.addLitsItem(newItem);
 
+            // Storage to add
+            StorageCtrl.storeItem(newItem);
+
            // get the total money value
            const totalMoney = ItemCtrl.getTotalMoney();
 
-          // Show total in ui
-          UICtrl.showTotalMoney(totalMoney);
+            // Show total in ui
+            UICtrl.showTotalMoney(totalMoney);
 
-         // Clear a UI input
-         UICtrl.clearInputState();
+            // Clear a UI input
+            UICtrl.clearInputState();
 
         }
 
@@ -327,6 +458,37 @@ const App = (function(){
 
     }
 
+    const itemUpdateSubmit = function(e){
+
+        e.preventDefault();
+
+        // Get the input
+        const input = UICtrl.getItemInput();
+
+        // Update item
+        const updatedItem = ItemCtrl.updateItem(input.name, input.money);
+
+        // Update in the UI
+        UICtrl.updateListItem(updatedItem);
+
+        // Update to ls
+        StorageCtrl.updateItemLs(updatedItem);
+
+        // Get the TOtal money
+        const totalMoney = ItemCtrl.getTotalMoney();
+
+        // Show total in ui
+        UICtrl.showTotalMoney(totalMoney);
+
+        // Clear input state
+        UICtrl.clearInputState();
+
+        // Clear Edit State
+        UICtrl.clearEditState();
+
+
+    }
+
     const itemDeleteSubmit = function(e){
 
         e.preventDefault();
@@ -340,6 +502,9 @@ const App = (function(){
 
         // Delete From UI
         UICtrl.deleteListItem(currentItem.id);
+
+        // Delete from ls
+        StorageCtrl.deleteFromLs(currentItem.id);
 
         // Get the TOtal money
         const totalMoney = ItemCtrl.getTotalMoney();
@@ -363,6 +528,9 @@ const App = (function(){
 
         // Clear All from ui
         UICtrl.clearItems();
+
+        // Clear all from storage
+        StorageCtrl.clearItemsLs();
 
         // Get the TOtal money
         const totalMoney = ItemCtrl.getTotalMoney();
