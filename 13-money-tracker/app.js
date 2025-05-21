@@ -79,6 +79,41 @@ const StorageCtrl = (function(){
 })();
 
 
+// API CONTROLLER
+
+const ApiCtrl = (function(){
+
+    const API_URL = "https://682b3632d29df7a95be285b8.mockapi.io/items";
+
+    return {
+        async fetchItems(){
+            const res = await fetch(API_URL);
+
+            return await res.json();
+        },
+        async addItem(item){
+            const res = await fetch(API_URL, {
+                method:"POST",
+                headers:{"Content-Type":"application/json"},
+                body:JSON.stringify(item)
+            });
+
+            return await res.json();
+        },
+        async deleteItem(id){
+            const res = await fetch(`${API_URL}/${id}`, {
+                method:"DELETE"
+            })
+        },
+        async clearAllItems(){
+            const items = await this.fetchItems();
+
+            
+            await Promise.all(items.map(item => this.deleteItem(item.id)));
+        }
+    }
+
+})();
 
 // ITEM CONTROLLER
 
@@ -102,7 +137,7 @@ const ItemCtrl = (function(){
         //     {id:1, name:"Food", money:2000},
         //     {id:2, name:"Car Service", money:5000},
         // ],
-        items:StorageCtrl.getItems(),
+        items:[],
         totalMoney:0,
         currentItem:null
     };
@@ -128,22 +163,9 @@ const ItemCtrl = (function(){
 
             return total;
         },
-        addItem:function(name, money){
+        addItem:function(newItem){
 
-            let ID;
-
-            // Create a ID
-            if(data.items.length > 0){
-                ID = data.items[data.items.length - 1].id + 1;
-            }else{
-                ID = 0;
-            }
-
-            money = parseInt(money);
-
-            // Create a new ITEM 
-
-            newItem = new Item(ID, name, money);
+            newItem = new Item(newItem.id, newItem.name, newItem.money);
 
             // console.log(newItem);
 
@@ -169,6 +191,9 @@ const ItemCtrl = (function(){
 
             return found;
             
+        },
+        setItems: function(items){
+           data.items = items;
         },
         setCurrentItem:function(item){
            data.currentItem = item;
@@ -214,15 +239,6 @@ const ItemCtrl = (function(){
     }
 
 })();
-
-
-
-// console.log(ItemCtrl);
-// console.log(ItemCtrl.getItem());
-
-// consolelog(data)
-
-// console.log(ItemCtrl.getItem()[0].id)
 
 
 // UI CONTROLLER
@@ -304,7 +320,6 @@ const UICtrl = (function(){
             document.querySelector(".back-btn").style.display = "inline";
         },
         addItemToForm: function(){
-            
             document.querySelector("#item-name").value = ItemCtrl.getCurrentItem().name;
             document.querySelector("#item-money").value = ItemCtrl.getCurrentItem().money;
         },
@@ -389,7 +404,7 @@ const App = (function(){
 
     }
 
-    const itemAddSubmit = function(e){
+    const itemAddSubmit = async function(e){
 
         e.preventDefault();
 
@@ -404,7 +419,10 @@ const App = (function(){
         }else{
 
             // Add item to array
-            const newItem = ItemCtrl.addItem(input.name, input.money);
+            const newItem = await ApiCtrl.addItem({name:input.name, money:parseInt(input.money)});
+
+
+            ItemCtrl.addItem(newItem);
 
             // Add iten to UI
             UICtrl.addLitsItem(newItem);
@@ -442,7 +460,7 @@ const App = (function(){
 
             // Get the ID Number
 
-            const id = parseInt(listArr[1]);
+            const id = listArr[1];
 
             // Get Item
             const itemToEdit = ItemCtrl.getItemByID(id);
@@ -489,13 +507,16 @@ const App = (function(){
 
     }
 
-    const itemDeleteSubmit = function(e){
+    const itemDeleteSubmit = async function(e){
 
         e.preventDefault();
 
         // Get the current Item
 
         const currentItem = ItemCtrl.getCurrentItem();
+
+        // DELETE FROM API
+        await ApiCtrl.deleteItem(currentItem.id)
 
         // Delete from the data structure
         ItemCtrl.deleteItem(currentItem.id);
@@ -521,6 +542,10 @@ const App = (function(){
     }
 
     const itemClearSubmit = function(e){
+
+        // FROM API CLEAR
+
+        ApiCtrl.clearAllItems();
 
         // Clear all from the data structure
 
@@ -555,13 +580,15 @@ const App = (function(){
 
 
     return {
-        start:function(){
+        start:async function(){
 
             // Clear the button
 
             UICtrl.clearEditState();
 
-            const items = ItemCtrl.getItem();
+            const items = await ApiCtrl.fetchItems();
+
+            ItemCtrl.setItems(items);
 
             if(items.length > 0){
 
@@ -585,26 +612,17 @@ App.start();
 
 
 
+const obj = {
+    a:'123',
+    b:function(){
+        console.log(this)
 
-// const obj = {
-//     a:"1",
-//     b:"2",
-//     c:"3"
-// }
+        function test(){
+            console.log(this)
+        }
 
-// console.log(obj.b);
+        test();
+    }
+}
 
-// console.log(obj["a"]);
-
-// const array = [1,2,3];
-
-// array.forEach(function(item){
-//     console.log(item);
-// })
-
-
-// const double = array.map(function(item){
-//     return item * 2;
-// })
-
-// console.log(double);
+obj.b();
