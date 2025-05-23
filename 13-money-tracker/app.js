@@ -83,7 +83,7 @@
 
 const ApiCtrl = (function(){
 
-    const API_URL = "https://682b3632d29df7a95be285b8.mockapi.io/items";
+    const API_URL = "";
 
     return {
         async fetchItems(){
