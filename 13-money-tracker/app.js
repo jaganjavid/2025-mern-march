@@ -4,79 +4,79 @@
 
 // STORAGE CONTROLLER
 
-const StorageCtrl = (function(){
+// const StorageCtrl = (function(){
 
-    return{
-        storeItem:function(newItem){
+//     return{
+//         storeItem:function(newItem){
            
-            let items;
+//             let items;
 
-            // Check if any items in array
+//             // Check if any items in array
 
-            if(localStorage.getItem("items") === null){
-                items = [];
-            }else{
-                // Get the existing data from ls
-                items = JSON.parse(localStorage.getItem("items"));
-            }
+//             if(localStorage.getItem("items") === null){
+//                 items = [];
+//             }else{
+//                 // Get the existing data from ls
+//                 items = JSON.parse(localStorage.getItem("items"));
+//             }
 
-            items.push(newItem);
+//             items.push(newItem);
 
-            localStorage.setItem("items", JSON.stringify(items));
+//             localStorage.setItem("items", JSON.stringify(items));
 
 
-        },
-        getItems: function(){
-            let items;
+//         },
+//         getItems: function(){
+//             let items;
 
-            // Check if any items in array
+//             // Check if any items in array
 
-            if(localStorage.getItem("items") === null){
-                items = [];
-            }else{
-                // Get the existing data from ls
-                items = JSON.parse(localStorage.getItem("items"));
-            }
+//             if(localStorage.getItem("items") === null){
+//                 items = [];
+//             }else{
+//                 // Get the existing data from ls
+//                 items = JSON.parse(localStorage.getItem("items"));
+//             }
 
-            return items;
-        },
-        updateItemLs: function(updatedItem){
+//             return items;
+//         },
+//         updateItemLs: function(updatedItem){
 
-            // Get the existing data from ls
-            let items = JSON.parse(localStorage.getItem("items"));
+//             // Get the existing data from ls
+//             let items = JSON.parse(localStorage.getItem("items"));
 
-            items.forEach(function(item, index){
+//             items.forEach(function(item, index){
 
-                if(updatedItem.id === item.id){
+//                 if(updatedItem.id === item.id){
                     
-                    items.splice(index, 1, updatedItem)
+//                     items.splice(index, 1, updatedItem)
 
-                }
+//                 }
                 
 
-            })
+//             })
 
-            localStorage.setItem("items", JSON.stringify(items));
+//             localStorage.setItem("items", JSON.stringify(items));
 
-        },
-        deleteFromLs:function(id){
+//         },
+//         deleteFromLs:function(id){
 
-            let items = JSON.parse(localStorage.getItem("items"));
+//             let items = JSON.parse(localStorage.getItem("items"));
 
-            items.forEach(function(item, index){
-                if(id === item.id){
-                    items.splice(index, 1)
-                }
-            })
+//             items.forEach(function(item, index){
+//                 if(id === item.id){
+//                     items.splice(index, 1)
+//                 }
+//             })
 
-            localStorage.setItem("items", JSON.stringify(items));
-        },
-        clearItemsLs:function(){
-            localStorage.removeItem("items");
-        }
-    }
+//             localStorage.setItem("items", JSON.stringify(items));
+//         },
+//         clearItemsLs:function(){
+//             localStorage.removeItem("items");
+//         }
+//     }
 
-})();
+// })();
 
 
 // API CONTROLLER
@@ -100,6 +100,15 @@ const ApiCtrl = (function(){
 
             return await res.json();
         },
+        async updateItem(item){
+            const res = await fetch(`${API_URL}/${item.id}`, {
+                method:"PUT",
+                headers:{"Content-Type":"application/json"},
+                body:JSON.stringify(item)
+            });
+
+            return await res.json();
+        },
         async deleteItem(id){
             const res = await fetch(`${API_URL}/${id}`, {
                 method:"DELETE"
@@ -114,6 +123,38 @@ const ApiCtrl = (function(){
     }
 
 })();
+
+
+const obj = {
+    a:"123",
+    b:function(){
+        console.log(this); // obj
+
+        // function test(){
+        //     console.log(this); // window
+        // }
+
+        const test = () => {
+            console.log(this); // obj
+        }
+
+        test();
+    }
+    // b:() => {
+    //     console.log(this);
+
+    //     const test = () => {
+    //         console.log(this);
+    //     }
+    //     test();
+    // }
+}
+
+
+// console.log(obj);
+
+obj.b();
+
 
 // ITEM CONTROLLER
 
@@ -217,17 +258,15 @@ const ItemCtrl = (function(){
         clearAllItems: function(){
             return data.items = [];
         },
-        updateItem: function(name, money){
-
-            money = Number(money);
+        updateItem: function(updateItem){
 
             let found = null;
 
             data.items.forEach(function(item){
 
                 if(item.id === data.currentItem.id){
-                    item.name = name,
-                    item.money = money,
+                    item.name = updateItem.name,
+                    item.money = updateItem.money,
                     found = item
                 }
 
@@ -427,8 +466,6 @@ const App = (function(){
             // Add iten to UI
             UICtrl.addLitsItem(newItem);
 
-            // Storage to add
-            StorageCtrl.storeItem(newItem);
 
            // get the total money value
            const totalMoney = ItemCtrl.getTotalMoney();
@@ -476,21 +513,26 @@ const App = (function(){
 
     }
 
-    const itemUpdateSubmit = function(e){
+    const itemUpdateSubmit = async function(e){
 
         e.preventDefault();
 
         // Get the input
         const input = UICtrl.getItemInput();
 
-        // Update item
-        const updatedItem = ItemCtrl.updateItem(input.name, input.money);
+        const currentItem = ItemCtrl.getCurrentItem();
+        
+        const updatedItem = {id:currentItem.id, name:input.name, money:parseInt(input.money)};
+
+        await ApiCtrl.updateItem(updatedItem);
+
+        const test = ItemCtrl.updateItem(updatedItem);
+
+        console.log(test);
 
         // Update in the UI
         UICtrl.updateListItem(updatedItem);
 
-        // Update to ls
-        StorageCtrl.updateItemLs(updatedItem);
 
         // Get the TOtal money
         const totalMoney = ItemCtrl.getTotalMoney();
@@ -524,9 +566,6 @@ const App = (function(){
         // Delete From UI
         UICtrl.deleteListItem(currentItem.id);
 
-        // Delete from ls
-        StorageCtrl.deleteFromLs(currentItem.id);
-
         // Get the TOtal money
         const totalMoney = ItemCtrl.getTotalMoney();
 
@@ -554,8 +593,6 @@ const App = (function(){
         // Clear All from ui
         UICtrl.clearItems();
 
-        // Clear all from storage
-        StorageCtrl.clearItemsLs();
 
         // Get the TOtal money
         const totalMoney = ItemCtrl.getTotalMoney();
@@ -612,17 +649,3 @@ App.start();
 
 
 
-const obj = {
-    a:'123',
-    b:function(){
-        console.log(this)
-
-        function test(){
-            console.log(this)
-        }
-
-        test();
-    }
-}
-
-obj.b();
