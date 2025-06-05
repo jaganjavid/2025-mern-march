@@ -20,6 +20,7 @@ body{
 .container{
   max-width: 750px;
   margin: 0px auto;
+  padding: 0px 15px;
 }
 
 main{
@@ -108,4 +109,8 @@ footer{
   background-color: lightgray;
   color: #333333;
   text-align: center;
+}
+
+.xyz{
+  border: 2px solid green;
 }

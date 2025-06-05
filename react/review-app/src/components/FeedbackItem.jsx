@@ -1,11 +1,13 @@
 import { MdEdit } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
+import Card from "./sharder/Card"
 
 const FeedbackItem = ({item, handleDelete}) => {
 
+
     
   return (
-    <div className='card'>
+    <Card>
         
         <div className='card-wrapper'>
           <h4>{item.text}</h4>
@@ -21,7 +23,7 @@ const FeedbackItem = ({item, handleDelete}) => {
           </div>
         </div>
         
-    </div>
+    </Card>
   )
 }
 

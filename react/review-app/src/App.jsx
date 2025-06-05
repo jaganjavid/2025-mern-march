@@ -23,6 +23,14 @@ const App = () => {
   ]);
 
 
+  const addFeedback = (newFeedback) => {
+
+    // console.log(...feedback);
+    // feedback.push(newFeedback);
+    setFeedback([newFeedback, ...feedback]);
+  }
+
+
   const deleteFeedback = (id) => {
    
     if(window.confirm("Are your sure?")){
@@ -37,7 +45,7 @@ const App = () => {
      <Header/>
 
      <div className='container'>
-       <FeedbackForm/>
+       <FeedbackForm handleAdd={addFeedback}/>
        <FeedbackList feedback={feedback} handleDelete={deleteFeedback}/>
      </div>
    </>
