@@ -1,29 +1,27 @@
-import React from 'react'
-
-const Header = ({text = "Review App", bgColor = "blue", textColor = "white"}) => {
+import { Link } from "react-router-dom";
 
 
-    // const {text, bgColor, textColor} = props;
 
-    // console.log(text);
-    // console.log(bgColor);
+const Header = ({ text = "Review app", bgColor = "blue", textColor = "white" }) => {
 
 
-    //   console.log(props);
+  const headerStyle = { backgroundColor: bgColor, color: textColor }
 
-    const headerStyle = {
-        backgroundColor:bgColor,
-        color:textColor
-    }
-    
 
   return (
     <header style={headerStyle}>
-        <div className='container'>
-            <h1>{text}</h1>
-        </div>
+      <div className="container">
+       <div className="flex">
+        <Link to="/">
+         <h4>{text}</h4>
+        </Link>
+        <Link to="/about">About Page</Link>
+       </div>
+        {/* <p>Dark</p> */}
+      </div>
     </header>
-  )
-}
+  );
+};
 
-export default Header
+
+export default Header;

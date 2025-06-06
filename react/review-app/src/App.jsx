@@ -1,56 +1,39 @@
-import React, { useState } from 'react'
 
-import Header from './components/Header'
-import FeedbackList from './components/FeedbackList'
+import FeedbackList from "./components/FeedbackList";
+import Header from "./components/Header";
 import FeedbackForm from "./components/FeedbackForm";
+import { Routes, Route } from "react-router-dom";
+import About from "./components/About";
+
+
+
+
+
+
+
 
 const App = () => {
-
-
-  const [feedback, setFeedback] = useState([
-    {
-        id:1,
-        text:"This is a sample 1"
-    },
-    {
-        id:2,
-        text:"This is a sample 2"
-    },
-    {
-        id:3,
-        text:"This is a sample 3"
-    },
-  ]);
-
-
-  const addFeedback = (newFeedback) => {
-
-    // console.log(...feedback);
-    // feedback.push(newFeedback);
-    setFeedback([newFeedback, ...feedback]);
-  }
-
-
-  const deleteFeedback = (id) => {
-   
-    if(window.confirm("Are your sure?")){
-      setFeedback(feedback.filter(item => item.id !== id))
-    }
-
-  }
-
-  
+ 
   return (
-   <>
-     <Header/>
+    <>
+      <Header/>
+      <div className="container">
+        
+        <Routes>
+          <Route path="/" element={
+            <>
+            <FeedbackForm/>
+            <FeedbackList/>
+            </>
+          }/>
 
-     <div className='container'>
-       <FeedbackForm handleAdd={addFeedback}/>
-       <FeedbackList feedback={feedback} handleDelete={deleteFeedback}/>
-     </div>
-   </>
-  )
+          <Route path="/about" element={<About/>}/>
+         
+        </Routes>
+       
+      </div>
+    </>
+  );
 }
 
-
-export default App
+export default App;
