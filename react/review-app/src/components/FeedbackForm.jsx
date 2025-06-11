@@ -1,90 +1,88 @@
-import React, { useContext, useEffect, useState } from 'react'
-import Card from './sharder/Card'
-import Button from './sharder/Button'
-import FeedbackContext from '../context/FeedbackContext'
+import { useContext, useState, useEffect } from "react"
+import Button from "./sharder/Button"
+import Card from "./sharder/Card"
+import FeedbackContext from "../context/FeedbackContext"
+import { v4 as uuidv4 } from 'uuid';
 
 
 
 
 const FeedbackForm = () => {
 
-  const {addFeedback,feedBackEdit,updateFeedback} = useContext(FeedbackContext);
 
-  // console.log(feedBackEdit);
+  const {addFeedback, feedbackEdit, updateFeedback} = useContext(FeedbackContext);
+
 
   const [text, setText] = useState("");
-  const [btnDisabled, setBtnDisabled] = useState(true);
+  const [btnDisable, setBtnDisabled] = useState(true);
   const [message, setMessage] = useState("");
 
-  const [inc, setInc] = useState(0);
-
   const handleTextChange = (e) => {
-    
     const trimmedText = e.target.value.trimStart();
+
     let textError = "";
 
     if(trimmedText.length < 10){
-      textError = "Feedback must me at 10 char";
+      textError = "Character must be at leat 10"
       setMessage(textError);
-      setBtnDisabled(true)
+      setBtnDisabled(true);
     }else{
       setMessage("");
       setBtnDisabled(false);
     }
 
+
+
     setText(trimmedText);
-
-
   }
 
-  const handleSubmit = (e) =>{
-    e.preventDefault();
+  const handleSubmit = (e) => {
+     e.preventDefault();
+     
+     const newFeedback = {
+      //  id:uuidv4(),
+       text:text
+     };
 
-    const newFeedback = {
-      text
+    if(feedbackEdit.edit === true){
+      updateFeedback(feedbackEdit.item.id, newFeedback);
+    }else {
+      addFeedback(newFeedback);
     }
 
-    
-
-    if(feedBackEdit.edit === true){
-      updateFeedback(feedBackEdit.item.id, newFeedback);
-    } else{
-      addFeedback(newFeedback)
-    }
-  
     setText("");
     setBtnDisabled(true);
   }
 
+
   useEffect(() => {
+      // console.log("Hello");
+      if(feedbackEdit.edit === true){
+        setBtnDisabled(false);
+        setText(feedbackEdit.item.text)
+      }
 
-   if(feedBackEdit.edit === true){
-      setBtnDisabled(false);
-      setText(feedBackEdit.item.text);
-   }
-    
-  }, [feedBackEdit]); 
- 
+      // console.log("Hello");
+
+  }, [feedbackEdit]);
+
   return (
-    <>
-      <Card>
-         <h3>Add your feedback</h3>
+    <Card>
+       <h3>Add your Reviews</h3>
 
-         <form onSubmit={handleSubmit}>
-            <div className='input-group'>
-                <input type="text" placeholder='Enter your ideas' value={text} onChange={handleTextChange}/>
-                <Button type="submit" version="primary" isDisabled={btnDisabled}>Send</Button>
-            </div>
+       <form onSubmit={handleSubmit}>
+          <div className='input-group'>
+            <input type="text" placeholder='Enter yout ideas' value={text}
+            onChange={handleTextChange}/>
+            <Button version={feedbackEdit.edit ? "secondary" :"primary"} type="submit" isDisbled={btnDisable}>
+               {feedbackEdit.edit ? "Update" : "Send"}
+            </Button>
+          </div>
 
-            <p className='message'>{message ? message : null}</p>
-         </form>
+
+          <p className="message">{message && message}</p>
+       </form>
     </Card>
-
-    {/* <button onClick={() => setInc((prev) => prev + 1)}>Click</button>
-
-    {inc} */}
-    
-    </>
   )
 }
 
