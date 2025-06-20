@@ -1,0 +1,117 @@
+import { createContext, useEffect, useState } from "react";
+
+const FeedbackContext = createContext();
+
+
+export const FeedbackProvider = ({children}) => {
+
+
+    const [feedback, setFeedback] = useState([
+        // {
+        //     id:1,
+        //     text:"This is a sample 1 from context"
+        // },
+        // {
+        //     id:2,
+        //     text:"This is a sample 2 from context"
+        // },
+        // {
+        //     id:3,
+        //     text:"This is a sample 3 from context"
+        // },
+      ]);
+
+
+      useEffect(() => {
+        console.log("Started");
+
+        fecthFeedback();
+      }, []);
+
+      // Fetch Feedback
+
+      const fecthFeedback = async () => {
+        
+        const response = await fetch("http://localhost:3000/tasks");
+
+        const data = await response.json();
+
+        setFeedback(data);
+
+      }
+
+      const [feedbackEdit, setFeedbackEdit] = useState({
+        item:{},
+        edit:false
+      })
+
+      const addFeedback = async (newFeedback) => {
+
+        const response = await fetch("http://localhost:3000/tasks", {
+          method:"POST",
+          headers:{
+            "Content-type":"application/json",
+          },
+          body:JSON.stringify(newFeedback)
+        })
+
+        const data = await response.json();
+        
+        setFeedback([data, ...feedback]);
+      }
+
+      const updateFeedback = async(id, updItem) => {
+
+        const response = await fetch(`http://localhost:3000/tasks/${id}`, {
+          method:"PUT",
+          headers:{
+            "Content-type":"application/json",
+          },
+          body:JSON.stringify(updItem)
+        })
+
+        const data = await response.json();
+        
+        setFeedback(feedback.map((item) => item.id === id ? {...item, ...data} : item));
+
+        setFeedbackEdit({
+          item:{},
+          edit:false
+        })
+      }
+
+      const deleteFeedback = async(id) => {
+        if(window.confirm("Are your sure?")){
+
+          const response = await fetch(`http://localhost:3000/tasks/${id}`, {
+            method:"DELETE"
+          })
+          
+          setFeedback(feedback.filter(item => item.id !== id))
+        }
+      }
+
+      const editFeedback = (item) => {
+        setFeedbackEdit({
+          item:item,
+          edit:true
+        })
+      }
+
+
+    return (
+        <FeedbackContext.Provider value={{
+            feedback,
+            feedbackEdit,
+            addFeedback,
+            deleteFeedback,
+            editFeedback,
+            updateFeedback
+        }}>
+            {children}
+        </FeedbackContext.Provider>
+    )
+
+}
+
+export default FeedbackContext;
