@@ -2,14 +2,14 @@
 import { useState, useEffect } from "react";
 import { options } from "../utils/Options";
 
-const useFetch = (apiPath) => {
+const useFetch = (apiPath,queryTerm) => {
 
     const [data, setData] = useState([]);
 
     useEffect(() => {
         async function fetchMovies() {
             try{
-                const response = await fetch(`https://api.themoviedb.org/3/${apiPath}`, options);
+                const response = await fetch(`https://api.themoviedb.org/3/${apiPath}?query=${queryTerm}`, options);
                 const data = await response.json();
 
                 setData(data.results ? data.results : data);
@@ -21,7 +21,7 @@ const useFetch = (apiPath) => {
         fetchMovies();
 
 
-    }, [apiPath]);
+    }, [apiPath, queryTerm]);
 
     // console.log("Data Stored", data);
 
