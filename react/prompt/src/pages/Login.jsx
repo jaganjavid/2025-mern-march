@@ -1,14 +1,32 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext';
 
 
 const Login = () => {
+
+  const { registerWithEmail,loginwithGoogle,loginWithEmail } = useAuth();
 
   const [isLogin, setIsLogin] = useState(true);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+
+  const handleSubmit = async(e) => {
+    e.preventDefault();
+    if(isLogin){
+      try{
+        await loginWithEmail(email, password);
+        navigate("/playground");
+      }catch(err){
+        console.log(err);
+      }
+    }else{
+      await registerWithEmail(email, password, name);
+    }
+
+  }
 
 
   return (
@@ -17,7 +35,7 @@ const Login = () => {
         {isLogin ? "Login to Promt Learn" : "Register a new account"}
       </h2>
 
-      <form className="space-y-3">
+      <form className="space-y-3" onSubmit={handleSubmit}> 
          
           {!isLogin && (
             <input
@@ -52,6 +70,10 @@ const Login = () => {
 
       <button
         className="w-full bg-blue-600 text-white py-2 rounded"
+        onClick={async () => {
+          await loginwithGoogle();
+          navigate("/playground");
+        }}
       >
         Continue with Google
       </button>
