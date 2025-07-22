@@ -1,11 +1,17 @@
 import { useState } from "react";
 import { useSkills } from "../context/SkillContext";
+import { useDispatch } from "react-redux";
+import { addSkill } from "../redux/skillsSlice";
+
 
 
 export default function SkillForm() {
 
-  const { addSkills } = useSkills();
 
+
+  // const { addSkills } = useSkills();
+
+  const dispatch = useDispatch();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
 
@@ -14,7 +20,7 @@ export default function SkillForm() {
     if (!name) return;
 
     try {
-      await addSkills({name, description});
+      await dispatch(addSkill({name, description}));
       setName("");
       setDescription("");
     } catch (error) {

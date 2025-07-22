@@ -1,25 +1,37 @@
 import { useEffect, useState } from "react";
 import { useSkills } from "../context/SkillContext";
+import { fetchSkills } from "../redux/skillsSlice";
+import { useSelector, useDispatch } from "react-redux"
 
 export default function SkillList() {
   
-  const { skills, deleteSkill, updateSkill,setEditSkill} = useSkills();
+  // const { skills, deleteSkill, updateSkill,setEditSkill} = useSkills();
+
+  const dispatch = useDispatch();
+  const { skills } = useSelector((state) => state.skills);
+
   const [editId, setEditId] = useState(null);
   const [editName, setEditName] = useState("");
   const [editDesc, setEditDesc] = useState("");
 
-  const handleEdit = (skill) => {
-    setEditId(skill._id);
-    setEditName(skill.name);
-    setEditDesc(skill.description);
-  }
+  useEffect(() => {
+    dispatch(fetchSkills());
+  }, [dispatch]);
 
-  const handleUpdate = async () => {
-    await updateSkill(editId, {name:editName, description:editDesc});
-    setEditId(null);
-    setEditName("");
-    setEditDesc("");
-  }
+  console.log(skills);
+
+  // const handleEdit = (skill) => {
+  //   setEditId(skill._id);
+  //   setEditName(skill.name);
+  //   setEditDesc(skill.description);
+  // }
+
+  // const handleUpdate = async () => {
+  //   await updateSkill(editId, {name:editName, description:editDesc});
+  //   setEditId(null);
+  //   setEditName("");
+  //   setEditDesc("");
+  // }
 
 
   return (
@@ -62,13 +74,13 @@ export default function SkillList() {
               <div className="flex gap-2">
                 <button
                   className="text-blue-600 font-semibold"
-                  onClick={() => handleEdit(skill)}
+                  onClick={() => console.log("Edit")}
                 >
                   Edit
                 </button>
                 <button
                   className="text-red-600 font-semibold"
-                  onClick={() => deleteSkill(skill._id)}
+                  onClick={() => console.log("Delete")}
                 >
                   Delete
                 </button>
